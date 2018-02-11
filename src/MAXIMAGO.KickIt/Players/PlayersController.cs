@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace MAXIMAGO.KickIt.Players
 {
     [Route("api/players")]
-    public class PlayersController : Controller
+    public sealed class PlayersController : Controller
     {
         private PlayerRepository playerRepository;
 
         public PlayersController(PlayerRepository playerRepository)
         {
-            this.playerRepository = playerRepository;
+            this.playerRepository = playerRepository 
+                ?? throw new ArgumentNullException(nameof(playerRepository));
         }
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(typeof(IEnumerable<Player>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<Player>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
             var players = await playerRepository.Get();
@@ -46,18 +47,17 @@ namespace MAXIMAGO.KickIt.Players
             {
                 return StatusCode(
                     (int)HttpStatusCode.Conflict, 
-                    $"Player with the id {player.Id} already exists.");
+                    $"Player with the id '{player.Id}' already exists.");
             }
 
             var savedPlayer = await playerRepository.Save(player);
-
-            return Ok(savedPlayer);
+            return Created(Url.Link("GetPlayer", new { id = player.Id }), savedPlayer);
         }
         
         [HttpGet]
-        [Route("{id}")]
-        [ProducesResponseType(typeof(Player), 200)]
-        [ProducesResponseType(typeof(string), 404)]
+        [Route("{id}", Name = "GetPlayer")]
+        [ProducesResponseType(typeof(Player), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetPlayer(long id)
         {
             var player = await playerRepository.Get(id);
@@ -84,7 +84,9 @@ namespace MAXIMAGO.KickIt.Players
 
             if (player.Id != 0 && player.Id != id)
             {
-                return StatusCode((int)HttpStatusCode.Conflict, "Provided id from url does not match to provided player");
+                return StatusCode(
+                    (int)HttpStatusCode.Conflict, 
+                    "Provided id from url does not match to provided player");
             }
 
             if (!ModelState.IsValid)
@@ -92,9 +94,9 @@ namespace MAXIMAGO.KickIt.Players
                 return BadRequest(ModelState);
             }
 
-            if (await playerRepository.Exists(id))
+            if (!await playerRepository.Exists(id))
             {
-                return NotFound($"Player with id '{id}' not found");
+                return NotFound($"Player with id '{id}' was not found");
             }
 
             var savedPlayer = await playerRepository.Save(player);
@@ -105,17 +107,17 @@ namespace MAXIMAGO.KickIt.Players
         [Route("{id}")]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.NotModified)]
         public async Task<IActionResult> DeletePlayer(long id)
         {
             var player = await playerRepository.Get(id);
             if (player == null)
             {
-                return NotFound();
+                return NotFound($"Player with id '{id}' not found");
             }
 
             var deleted = await playerRepository.Delete(player);
-
-            return (deleted ? (IActionResult)NoContent() : NotFound());
+            return (deleted ? NoContent() : StatusCode((int)HttpStatusCode.NotModified));
         }
     }
 }
