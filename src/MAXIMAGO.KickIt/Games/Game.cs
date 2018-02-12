@@ -9,7 +9,7 @@ namespace MAXIMAGO.KickIt.Games
     /// </summary>
     public sealed class Game
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         public DateTime Created { get; set; }
 

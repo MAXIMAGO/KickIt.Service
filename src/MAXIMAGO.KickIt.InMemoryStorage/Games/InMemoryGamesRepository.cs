@@ -1,21 +1,33 @@
 ﻿using MAXIMAGO.KickIt.Games;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MAXIMAGO.KickIt.InMemoryStorage.Games
 {
     public sealed class InMemoryGamesRepository : GamesRepository
     {
-        public Task<IEnumerable<Game>> Get()
+        private static List<Game> games = new List<Game>();
+        private object lockObj = new object();
+
+        public async Task<IEnumerable<Game>> Get()
         {
-            throw new NotImplementedException();
+            IEnumerable<Game> result;
+            lock (lockObj)
+            {
+                result = games.ToArray();
+            }
+            return await Task.FromResult(result);
         }
 
-        public Task<Game> Get(string id)
+        public async Task<Game> Get(long id)
         {
-            throw new NotImplementedException();
+            Game result;
+            lock(lockObj)
+            {
+                result = games.FirstOrDefault(game => game.Id == id);
+            }
+            return await Task.FromResult(result);
         }
     }
 }
