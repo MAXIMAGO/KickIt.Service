@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Remove="swagger-maximago-theme.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot\swagger-maximago-theme.css">
+      <CustomToolNamespace>MAXIMAGO.KickIt.Host</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MAXIMAGO.KickIt.InMemoryStorage\MAXIMAGO.KickIt.InMemoryStorage.csproj" />
     <ProjectReference Include="..\MAXIMAGO.KickIt.SQLiteStorage\MAXIMAGO.KickIt.SQLiteStorage.csproj" />
     <ProjectReference Include="..\MAXIMAGO.KickIt\MAXIMAGO.KickIt.csproj" />
@@ -26,6 +32,12 @@
 
   <ItemGroup>
     <Content Update="seed\players.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\swagger-maximago-theme.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

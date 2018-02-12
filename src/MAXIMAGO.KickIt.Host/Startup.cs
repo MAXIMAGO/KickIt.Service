@@ -63,24 +63,16 @@ namespace MAXIMAGO.KickIT
                 app.UseDeveloperExceptionPage();
             }
 
+            
             app.UseCors(ALLOW_ALL_POLICY_NAME);
             app.UseMvc();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+                c.InjectStylesheet("/swagger-maximago-theme.css");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MAXIMAGO KickIT API V1");
             });
-
-            // Seeding Database
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                if (!serviceScope.ServiceProvider.GetService<KickItStorageContext>().AllMigrationsApplied())
-                {
-                    serviceScope.ServiceProvider.GetService<KickItStorageContext>().Database.Migrate();
-                    serviceScope.ServiceProvider.GetService<KickItStorageContext>().EnsureSeeded();
-                }
-            }
         }
     }
 }

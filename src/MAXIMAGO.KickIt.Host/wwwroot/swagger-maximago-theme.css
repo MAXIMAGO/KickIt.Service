@@ -1,0 +1,12 @@
+﻿body {
+    font-family: "Open Sans";
+    background-color: rgb(3, 20, 31);
+}
+
+.swagger-section #header {
+    background-color: rgb(234, 91, 12);
+}
+
+.info_title {
+    color: rgb(234, 91, 12);
+}
