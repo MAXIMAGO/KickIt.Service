@@ -1,4 +1,6 @@
-﻿using MAXIMAGO.KickIt.InMemoryStorage.Players;
+﻿using MAXIMAGO.KickIt.Games;
+using MAXIMAGO.KickIt.InMemoryStorage.Games;
+using MAXIMAGO.KickIt.InMemoryStorage.Players;
 using MAXIMAGO.KickIt.Players;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +42,7 @@ namespace MAXIMAGO.KickIT
             });
 
             services.AddTransient<PlayerRepository, InMemoryPlayerRepository>();
+            services.AddTransient<GamesRepository, InMemoryGamesRepository>();
         }
 
         /// <summary>
