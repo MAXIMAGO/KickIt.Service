@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  maximago.kickit.host:
+    image: maximago.kickit.host
+    build:
+      context: .
+      dockerfile: MAXIMAGO.KickIt.Host/Dockerfile

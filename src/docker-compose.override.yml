@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  maximago.kickit.host:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
