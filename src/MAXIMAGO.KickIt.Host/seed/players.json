@@ -1,0 +1,16 @@
+﻿[
+  {
+    "id": 1,
+    "emailAddress": "msh@maximago.de",
+    "firstName": "Maik",
+    "lastName": "Schöneich",
+    "gender": 1
+  },
+  {
+    "id": 2,
+    "emailAddress": "kow@maximago.de",
+    "firstName": "Kingsley",
+    "lastName": "Owusu-Sekyere",
+    "gender": 1
+  }
+]

@@ -20,7 +20,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MAXIMAGO.KickIt.InMemoryStorage\MAXIMAGO.KickIt.InMemoryStorage.csproj" />
+    <ProjectReference Include="..\MAXIMAGO.KickIt.SQLiteStorage\MAXIMAGO.KickIt.SQLiteStorage.csproj" />
     <ProjectReference Include="..\MAXIMAGO.KickIt\MAXIMAGO.KickIt.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="seed\players.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MAXIMAGO.KickIt.Games;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MAXIMAGO.KickIt.Players
 {
-    public sealed class Player
+    public class Player
     {
         public long Id { get; set; }
 
