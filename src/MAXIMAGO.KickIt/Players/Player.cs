@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MAXIMAGO.KickIt.Games;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MAXIMAGO.KickIt.Players
 {
-    public sealed class Player
+    public class Player
     {
         public long Id { get; set; }
 
@@ -16,5 +18,13 @@ namespace MAXIMAGO.KickIt.Players
 
         [EnumDataType(typeof(Gender))]
         public Gender Gender { get; set; }
+
+        public void UpdatePlayer(Player player)
+        {
+            FirstName = player.FirstName;
+            LastName = player.LastName;
+            EmailAddress = player.EmailAddress;
+            Gender = player.Gender;
+        }
     }
 }
