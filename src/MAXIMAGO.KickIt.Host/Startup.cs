@@ -73,6 +73,7 @@ namespace MAXIMAGO.KickIT
                 c.InjectStylesheet("/swagger-maximago-theme.css");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MAXIMAGO KickIT API V1");
             });
+            app.UseFileServer();
         }
     }
 }
