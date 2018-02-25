@@ -18,5 +18,13 @@ namespace MAXIMAGO.KickIt.Players
 
         [EnumDataType(typeof(Gender))]
         public Gender Gender { get; set; }
+
+        public void UpdatePlayer(Player player)
+        {
+            FirstName = player.FirstName;
+            LastName = player.LastName;
+            EmailAddress = player.EmailAddress;
+            Gender = player.Gender;
+        }
     }
 }

@@ -42,19 +42,21 @@ namespace MAXIMAGO.KickIt.SQLiteStorage.Players
 
         public async Task<Player> Save(Player player)
         {
-            EntityEntry<Player> playerEntry;
+            Player playerEntry;
             if (await Exists(player.Id))
             {
-                playerEntry = context.Players.Attach(player);
+                var savedPlayer = await context.Players.SingleOrDefaultAsync(x => x.Id == player.Id);
+                savedPlayer.UpdatePlayer(player);
                 await context.SaveChangesAsync();
+                playerEntry = savedPlayer;
             }
             else
             {
-                playerEntry = context.Players.Add(player);
+                playerEntry = context.Players.Add(player).Entity;
                 await context.SaveChangesAsync();
             }
 
-            return playerEntry.Entity;
+            return playerEntry;
         }
 
         #region IDisposable Support
