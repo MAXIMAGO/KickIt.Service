@@ -1,7 +1,12 @@
-﻿using MAXIMAGO.KickIt.InMemoryStorage.Players;
+﻿using MAXIMAGO.KickIt.Games;
+using MAXIMAGO.KickIt.InMemoryStorage.Games;
+using MAXIMAGO.KickIt.InMemoryStorage.Players;
 using MAXIMAGO.KickIt.Players;
+using MAXIMAGO.KickIt.SQLiteStorage;
+using MAXIMAGO.KickIt.SQLiteStorage.Players;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -32,14 +37,18 @@ namespace MAXIMAGO.KickIT
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()));
-
+            
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "MAXIMAGO KickIT API", Version = "v1" });
             });
 
-            services.AddTransient<PlayerRepository, InMemoryPlayerRepository>();
+            services.AddDbContext<KickItStorageContext>(optionsBuilder => 
+                optionsBuilder.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<PlayerRepository, SQLitePlayersRepository>();
+            services.AddTransient<GamesRepository, InMemoryGamesRepository>();
         }
 
         /// <summary>
@@ -62,6 +71,16 @@ namespace MAXIMAGO.KickIT
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MAXIMAGO KickIT API V1");
             });
+
+            // Seeding Database
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (!serviceScope.ServiceProvider.GetService<KickItStorageContext>().AllMigrationsApplied())
+                {
+                    serviceScope.ServiceProvider.GetService<KickItStorageContext>().Database.Migrate();
+                    serviceScope.ServiceProvider.GetService<KickItStorageContext>().EnsureSeeded();
+                }
+            }
         }
     }
 }
